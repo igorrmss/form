@@ -1,33 +1,48 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import js from '@eslint/js';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import prettierPlugin from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 
 export default [
-  { ignores: ['dist'] },
+  js.configs.recommended, // eslint:recommended equivalente
+
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.jsx', '**/*.js'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
-      },
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      parser: babelParser,
     },
     plugins: {
+      react,
       'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      'jsx-a11y': jsxA11y,
+      prettier: prettierPlugin,
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      // Prettier integrado como lint error
+      'prettier/prettier': 'error',
+
+      // React
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+
+      // React Hooks
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+
+      // Variáveis e console
+      'no-unused-vars': 'warn',
+      'no-console': 'warn',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
   },
-]
+
+  prettierConfig, // resolve conflitos entre ESLint e Prettier
+];
