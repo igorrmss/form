@@ -1,3 +1,10 @@
+import GlobalStyles from '../../assets/styles/global'
+
 export default function App() {
-  return "Olá mundo!";
+  return (
+    <>
+      <span>Olá Mundo!</span>
+      <GlobalStyles />
+    </>
+  )
 }
